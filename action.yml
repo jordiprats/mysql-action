@@ -1,0 +1,22 @@
+name: 'Setup MySQL'
+description: 'Setup a test MySQL database'
+author: 'Jordi Prats'
+branding:
+  icon: 'database'
+  color: 'blue'
+inputs:
+  mysql version:
+    description: 'Version of MySQL to use'
+    required: false
+    default: 'latest'
+  mysql root password:
+    description: 'MYSQL_ROOT_PASSWORD - root superuser password'
+    required: false
+    default: 'sha256'
+  mysql database:
+    description: 'MYSQL_DATABASE - name for the default database that is created'
+    required: false
+    default: ''
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
