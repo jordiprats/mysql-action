@@ -13,7 +13,7 @@ else
   echo "sha256" >> ~/.my.password
 fi
 
-chmod 0600 ~/.my.cnf
+chmod 0600 ~/.my.password
 
 DOCKERUN="$DOCKERUN -d -p $INPUT_HOST_PORT:$INPUT_CONTAINER_PORT mysql:$INPUT_MYSQL_VERSION --port=$INPUT_CONTAINER_PORT"
 DOCKERUN="$DOCKERUN --character-set-server=$INPUT_CHARACTER_SET_SERVER --collation-server=$INPUT_COLLATION_SERVER"
@@ -22,15 +22,25 @@ sh -c "$DOCKERUN"
 
 docker ps
 
-cat ~/.my.cnf
+echo "show processlist" | bash -x /bin/mysql
+echo "show databases" | bash -x /bin/mysql
 
-find . -type f
-
-echo "show processlist" | mysql
+RETURN=0
 
 if [ ! -z "${INPUT_TEST_DIR}" ];
 then
-	/usr/bin/find "${INPUT_TEST_DIR}" -iname '*.sh' -exec {} \;
+  FIND_DIR="${INPUT_TEST_DIR}"
 else
-  /usr/bin/find . -iname '*.sh' -exec {} \;
+  FIND_DIR="."
 fi
+
+for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
+do
+  bash $i
+  if [ "$?" -ne 0 ];
+  then
+    RETURN = 1
+  fi
+done
+
+exit $RETURN
