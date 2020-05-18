@@ -17,6 +17,10 @@ inputs:
     description: 'MYSQL_DATABASE - name for the default database that is created'
     required: false
     default: ''
+  test dir:
+    description: 'Directory where to find the test to execute'
+    required: false
+    default: '.'
 runs:
   using: 'docker'
   image: 'Dockerfile'

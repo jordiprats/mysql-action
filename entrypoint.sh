@@ -35,13 +35,9 @@ cat ~/.my.cnf
 
 find . -type f
 
-if [[ "$#" -eq "1" ]]; then
-	# No arguments given, run the syntax checker on every Puppet manifest in the current directory
-	/usr/bin/find . -iname '*.sh' -exec {} \;
+if [ ! -z "${INPUT_TEST_DIR}" ];
+then
+	/usr/bin/find "${INPUT_TEST_DIR}" -iname '*.sh' -exec {} \;
 else
-	# Run the syntax checker on the given files / directories
-	for i in $@;
-  do
-    /usr/bin/find $i -iname '*.sh' -exec {} \;
-  done
+  /usr/bin/find . -iname '*.sh' -exec {} \;
 fi
