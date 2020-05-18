@@ -1,4 +1,4 @@
-name: 'Setup MySQL'
+name: 'MySQL selector'
 description: 'Setup a test MySQL database'
 author: 'Jordi Prats'
 branding:
