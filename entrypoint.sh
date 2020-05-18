@@ -33,6 +33,8 @@ docker ps
 
 cat ~/.my.cnf
 
+find . -type f
+
 if [[ "$#" -eq "1" ]]; then
 	# No arguments given, run the syntax checker on every Puppet manifest in the current directory
 	/usr/bin/find . -iname '*.sh' -exec {} \;
@@ -41,5 +43,5 @@ else
 	for i in $@;
   do
     /usr/bin/find $i -iname '*.sh' -exec {} \;
-  fi
+  done
 fi
