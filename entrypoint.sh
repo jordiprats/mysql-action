@@ -15,12 +15,13 @@ fi
 
 chmod 0600 ~/.my.password
 
-DOCKERUN="$DOCKERUN -d -p $INPUT_HOST_PORT:$INPUT_CONTAINER_PORT mysql:$INPUT_MYSQL_VERSION --port=$INPUT_CONTAINER_PORT"
-DOCKERUN="$DOCKERUN --character-set-server=$INPUT_CHARACTER_SET_SERVER --collation-server=$INPUT_COLLATION_SERVER"
+DOCKERUN="$DOCKERUN -d -p 3306:3306 mysql:$INPUT_MYSQL_VERSION --port=3306"
 
+echo $DOCKERUN
 sh -c "$DOCKERUN"
 
 docker ps
+docker ps --all
 
 echo "show processlist" | bash -x /bin/mysql
 echo "show databases" | bash -x /bin/mysql
