@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM docker:stable
 
 LABEL "maintainer"="Jordi Prats <https://github.com/jordiprats/>"
 

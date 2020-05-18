@@ -1,5 +1,5 @@
-name: 'MySQL selector'
-description: 'Setup a test MySQL database'
+name: 'Test environment for MySQL'
+description: 'Perform a set of predefinet tests using a MySQL database'
 author: 'Jordi Prats'
 branding:
   icon: 'database'

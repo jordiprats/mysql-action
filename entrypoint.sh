@@ -4,6 +4,8 @@ apt-get update
 
 apt-get install mysql-client -y
 
+yum update
+
 echo "[client]" > ~/.my.cnf
 echo "port = 3306" >> ~/.my.cnf
 echo "host = 127.0.0.1" >> ~/.my.cnf
