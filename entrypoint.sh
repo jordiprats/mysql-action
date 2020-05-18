@@ -22,7 +22,7 @@ chmod 0600 ~/.my.cnf
 
 cat ~/.my.cnf
 
-DOCKERUN="$DOCKERUN --network host -d -p 3306:3306 mysql:$INPUT_MYSQL_VERSION --port=3306"
+DOCKERUN="$DOCKERUN -d -p 3306:3306 mysql:$INPUT_MYSQL_VERSION --port=3306"
 
 echo $DOCKERUN
 sh -c "$DOCKERUN"
