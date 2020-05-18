@@ -30,8 +30,8 @@ sh -c "$DOCKERUN"
 docker ps
 docker ps --all
 
-echo "show processlist" | bash -x /bin/mysql
-echo "show databases" | bash -x /bin/mysql
+echo "show processlist" | mysql
+echo "show databases" | mysql
 
 RETURN=1
 
