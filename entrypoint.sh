@@ -22,7 +22,7 @@ else
   echo "password=sha256" >> ~/.my.cnf
 fi
 
-chmod 0600 ~/.my.cnf 
+chmod 0600 ~/.my.cnf
 
 DOCKERUN="$DOCKERUN -d -p $INPUT_HOST_PORT:$INPUT_CONTAINER_PORT mysql:$INPUT_MYSQL_VERSION --port=$INPUT_CONTAINER_PORT"
 DOCKERUN="$DOCKERUN --character-set-server=$INPUT_CHARACTER_SET_SERVER --collation-server=$INPUT_COLLATION_SERVER"
@@ -32,3 +32,14 @@ sh -c "$DOCKERUN"
 docker ps
 
 cat ~/.my.cnf
+
+if [[ "$#" -eq "1" ]]; then
+	# No arguments given, run the syntax checker on every Puppet manifest in the current directory
+	/usr/bin/find . -iname '*.sh' -exec {} \;
+else
+	# Run the syntax checker on the given files / directories
+	for i in $@;
+  do
+    /usr/bin/find $i -iname '*.sh' -exec {} \;
+  fi
+fi
