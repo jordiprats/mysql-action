@@ -1,27 +1,16 @@
 #!/bin/sh
 
-apt-get update
-
-apt-get install mysql-client -y
-
-yum update
-
-echo "[client]" > ~/.my.cnf
-echo "port = 3306" >> ~/.my.cnf
-echo "host = 127.0.0.1" >> ~/.my.cnf
-echo "protocol=tcp" >> ~/.my.cnf
-
 DOCKERUN="docker run"
 
 if [ ! -z "$INPUT_MYSQL_ROOT_PASSWORD" ];
 then
   echo "setting root password"
   DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=$INPUT_MYSQL_ROOT_PASSWORD"
-  echo "password=$INPUT_MYSQL_ROOT_PASSWORD" >> ~/.my.cnf
+  echo "$INPUT_MYSQL_ROOT_PASSWORD" >> ~/.my.password
 else
   echo "default mysql password"
   DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=sha256"
-  echo "password=sha256" >> ~/.my.cnf
+  echo "sha256" >> ~/.my.password
 fi
 
 chmod 0600 ~/.my.cnf
@@ -36,6 +25,8 @@ docker ps
 cat ~/.my.cnf
 
 find . -type f
+
+echo "show processlist" | mysql
 
 if [ ! -z "${INPUT_TEST_DIR}" ];
 then
