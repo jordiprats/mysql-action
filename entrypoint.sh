@@ -2,18 +2,25 @@
 
 DOCKERUN="docker run"
 
+echo "[client]" > ~/.my.cnf
+echo "user=root" >> ~/.my.cnf
+echo "host=127.0.0.1" >> ~/.my.cnf
+echo "protocol=tcp" >> ~/.my.cnf
+
 if [ ! -z "$INPUT_MYSQL_ROOT_PASSWORD" ];
 then
   echo "setting root password"
   DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=$INPUT_MYSQL_ROOT_PASSWORD"
-  echo "$INPUT_MYSQL_ROOT_PASSWORD" >> ~/.my.password
+  echo "password=$INPUT_MYSQL_ROOT_PASSWORD" >> ~/.my.cnf
 else
   echo "default mysql password"
   DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=sha256"
-  echo "sha256" >> ~/.my.password
+  echo "password=sha256" >> ~/.my.cnf
 fi
 
-chmod 0600 ~/.my.password
+chmod 0600 ~/.my.cnf
+
+cat ~/.my.cnf
 
 DOCKERUN="$DOCKERUN -d -p 3306:3306 mysql:$INPUT_MYSQL_VERSION --port=3306"
 
@@ -26,7 +33,7 @@ docker ps --all
 echo "show processlist" | bash -x /bin/mysql
 echo "show databases" | bash -x /bin/mysql
 
-RETURN=0
+RETURN=1
 
 if [ ! -z "${INPUT_TEST_DIR}" ];
 then
@@ -38,9 +45,9 @@ fi
 for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
   bash $i
-  if [ "$?" -ne 0 ];
+  if [ "$?" -eq 0 ];
   then
-    RETURN = 1
+    RETURN = 0
   fi
 done
 
