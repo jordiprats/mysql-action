@@ -45,9 +45,16 @@ fi
 for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
   bash $i
-  if [ "$?" -eq 0 ];
+  if [ "$?" -eq 0 ] && [ "$RETURN" -ne 2 ];
   then
-    RETURN = 0
+    echo "OK: $i"
+    RETURN=0
+  elif [ "$?" -eq 0 ];
+  then
+    echo "OK: $i"
+  else
+    echo "FAILED: $i"
+    RETURN=2
   fi
 done
 
