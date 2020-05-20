@@ -30,8 +30,8 @@ CONTAINER_ID=$(sh -c "$DOCKERUN")
 docker ps
 docker ps --all
 
-echo "show processlist" | mysql
-echo "show databases" | mysql
+docker exec -t "$CONTAINER_ID" bash -c "echo 'show processlist' | mysql"
+docker exec -t "$CONTAINER_ID" bash -c "echo 'show databases' | mysql"
 
 RETURN=1
 
