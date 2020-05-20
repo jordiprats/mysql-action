@@ -2,14 +2,12 @@
 
 DOCKERUN="docker run"
 
-echo "[client]" > ./docker-mycnf
-
 echo "$INPUT_MYSQL_ROOT_PASSWORD"
 
 INPUT_MYSQL_ROOT_PASSWORD=${INPUT_MYSQL_ROOT_PASSWORD-sha256}
 
 DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=$INPUT_MYSQL_ROOT_PASSWORD"
-echo "password=${INPUT_MYSQL_ROOT_PASSWORD}" >> ./docker-mycnff
+echo -e "[client]\npassword=$INPUT_MYSQL_ROOT_PASSWORD" > ./docker-mycnf
 
 echo "$INPUT_MYSQL_ROOT_PASSWORD"
 
