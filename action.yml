@@ -21,6 +21,10 @@ inputs:
     description: 'Directory where to find the test to execute'
     required: false
     default: '.'
+  debug:
+    description: 'Enable script debug'
+    required: false
+    default: '0'
 runs:
   using: 'docker'
   image: 'Dockerfile'

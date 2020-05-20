@@ -35,7 +35,13 @@ do
   BASENAME=$(basename $i)
   cat "$i"
   docker exec -i "$CONTAINER_ID" tee "/testing/${BASENAME}" < "$i" > /dev/null
-  docker exec "$CONTAINER_ID" bash -x "/testing/${BASENAME}"
+
+  if [ "${INPUT_DEBUG-0}" = 1 ];
+  then
+    docker exec "$CONTAINER_ID" bash -x "/testing/${BASENAME}"
+  else
+    docker exec "$CONTAINER_ID" bash "/testing/${BASENAME}"
+  fi
 
   if [ "$?" -eq 0 ] && [ "$RETURN" -ne 2 ];
   then
