@@ -33,7 +33,7 @@ fi
 for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
   BASENAME=$(basename $i)
-  cat "$i"
+  docker exec "$CONTAINER_ID" mkdir /testing/
   docker exec -i "$CONTAINER_ID" tee "/testing/${BASENAME}" < "$i" > /dev/null
 
   if [ "${INPUT_DEBUG-0}" = 1 ];
