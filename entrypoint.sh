@@ -4,10 +4,14 @@ DOCKERUN="docker run"
 
 echo "[client]" > ./docker-mycnf
 
+echo "$INPUT_MYSQL_ROOT_PASSWORD"
+
 INPUT_MYSQL_ROOT_PASSWORD=${INPUT_MYSQL_ROOT_PASSWORD-sha256}
 
 DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=$INPUT_MYSQL_ROOT_PASSWORD"
-echo "password=$INPUT_MYSQL_ROOT_PASSWORD" >> ./docker-mycnff
+echo "password=${INPUT_MYSQL_ROOT_PASSWORD}" >> ./docker-mycnff
+
+echo "$INPUT_MYSQL_ROOT_PASSWORD"
 
 chmod 0600 ./docker-mycnf
 
@@ -28,10 +32,10 @@ echo docker cat
 docker exec "$CONTAINER_ID" bash -c "cat" < ./docker-mycnf
 echo dockercat to file
 docker exec "$CONTAINER_ID" bash -c "cat > /root/.my.cnf" < ./docker-mycnf
-docker exec "$CONTAINER_ID" "chmod 600 /root/.my.cnf"
+docker exec "$CONTAINER_ID" chmod 600 /root/.my.cnf
 
 echo == docker my.cnf ==
-docker exec "$CONTAINER_ID" "cat /root/.my.cnf"
+docker exec "$CONTAINER_ID" cat /root/.my.cnf
 
 docker ps --all
 
