@@ -27,7 +27,7 @@ echo $DOCKERUN
 echo local cat
 cat ./docker-mycnf
 echo docker cat to file
-docker exec "$CONTAINER_ID" tee /root/.my.cnf < ./docker-mycnf
+docker exec -i "$CONTAINER_ID" tee /root/.my.cnf < ./docker-mycnf
 echo docker cat imported file
 docker exec "$CONTAINER_ID" cat /root/.my.cnf
 
