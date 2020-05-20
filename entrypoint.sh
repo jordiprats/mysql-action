@@ -32,6 +32,12 @@ sleep 30s
 
 echo $DOCKERUN
 
+cat ~/.my.cnf | docker exec -t "$CONTAINER_ID" "cat > ~/.my.cnf"
+cat ~/.my.cnf | docker exec -t "$CONTAINER_ID" "chmod 600 ~/.my.cnf"
+
+echo == docker my.cnf ==
+cat ~/.my.cnf | docker exec -t "$CONTAINER_ID" "cat ~/.my.cnf"
+
 docker ps --all
 
 echo == ls $(pwd) ==
