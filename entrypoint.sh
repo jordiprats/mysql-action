@@ -37,7 +37,7 @@ do
   DIRNAME=$(dirname "$i")
   BASENAME=$(basename "$i")
   COMPANION_FILES=$(echo "$BASENAME" | sed 's/\.sh$//g')
-  cd DIRNAME
+  cd $DIRNAME
   tar czhf "${CWD}/${COMPANION_FILES}.tgz" "$COMPANION_FILES"
   echo == ORIGEN ==
   tar tvf "${CWD}/${COMPANION_FILES}.tgz"
