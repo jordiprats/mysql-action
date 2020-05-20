@@ -32,13 +32,15 @@ sleep 20s
 
 echo $DOCKERUN
 
-cat ~/.my.cnf | docker exec -t "$CONTAINER_ID" "cat > ~/.my.cnf"
+cat ~/.my.cnf | docker exec -t "$CONTAINER_ID" bash -c "cat > ~/.my.cnf"
 docker exec -t "$CONTAINER_ID" "chmod 600 ~/.my.cnf"
 
 echo == docker my.cnf ==
 docker exec -t "$CONTAINER_ID" "cat ~/.my.cnf"
 
 docker ps --all
+
+docker exec -t "$CONTAINER_ID" ps auxf
 
 echo == ls $(pwd) ==
 ls $(pwd)
@@ -65,10 +67,12 @@ fi
 
 for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
+  BASENAME=$(basename $i)
   cat "$i"
-  cat "$i" | docker exec -t "$CONTAINER_ID" "cat > /testing/runme"
-  docker exec -t "$CONTAINER_ID" "cat /testing/runme"
-  docker exec -t "$CONTAINER_ID" "bash /testing/runme"
+  cat "$i" | docker exec -t "$CONTAINER_ID" bash -c "cat > /testing/${BASENAME}"
+  docker exec -t "$CONTAINER_ID" cat "/testing/${BASENAME}"
+  docker exec -t "$CONTAINER_ID" bash "/testing/${BASENAME}"
+
   if [ "$?" -eq 0 ] && [ "$RETURN" -ne 2 ];
   then
     echo "OK: $i"
