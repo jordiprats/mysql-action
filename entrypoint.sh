@@ -40,7 +40,7 @@ do
   docker exec "$CONTAINER_ID" mkdir /testing/
   docker exec -i "$CONTAINER_ID" tee "/testing/${BASENAME}" < "$i" > /dev/null
   docker exec -i "$CONTAINER_ID" tee "/testing/${COMPANION_FILES}.tgz" < "${COMPANION_FILES}.tgz" > /dev/null
-  docker exec "$CONTAINER_ID" tar xzf "/testing/${COMPANION_FILES}.tgz"
+  docker exec "$CONTAINER_ID" tar xzvf "/testing/${COMPANION_FILES}.tgz"
   docker exec "$CONTAINER_ID" find /testing -type f
 
   if [ "${INPUT_DEBUG-0}" = 1 ];
