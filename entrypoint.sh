@@ -7,7 +7,7 @@ DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=$INPUT_MYSQL_ROOT_PASSWORD"
 echo -e "[client]\npassword=${INPUT_MYSQL_ROOT_PASSWORD-sha256}" > ./docker-mycnf
 chmod 0600 ./docker-mycnf
 
-DOCKERUN="$DOCKERUN -d -p 3307:3307 mysql:$INPUT_MYSQL_VERSION --port=3307"
+DOCKERUN="$DOCKERUN -d -p 3307:3307 mysql:${INPUT_MYSQL_VERSION-latest} --port=3307"
 
 echo -n "deploying mysql container... "
 CONTAINER_ID=$(sh -c "$DOCKERUN") 2>/dev/null
