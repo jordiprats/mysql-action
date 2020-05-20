@@ -22,7 +22,7 @@ chmod 0600 ~/.my.cnf
 
 cat ~/.my.cnf
 
-DOCKERUN="$DOCKERUN -d -p 3306:3306 mysql:$INPUT_MYSQL_VERSION --port=3306"
+DOCKERUN="$DOCKERUN -d -p 3306:3306 -v "$(pwd)":/testing mysql:$INPUT_MYSQL_VERSION --port=3306"
 
 echo $DOCKERUN
 CONTAINER_ID=$(sh -c "$DOCKERUN")
@@ -47,7 +47,7 @@ fi
 
 for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
-  docker exec -t "$CONTAINER_ID" bash "$i"
+  docker exec -t "$CONTAINER_ID" bash "/testing/$i"
   if [ "$?" -eq 0 ] && [ "$RETURN" -ne 2 ];
   then
     echo "OK: $i"
