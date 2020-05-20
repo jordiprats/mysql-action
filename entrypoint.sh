@@ -36,19 +36,29 @@ for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
   DIRNAME=$(dirname "$i")
   BASENAME=$(basename "$i")
+  
   COMPANION_FILES=$(echo "$BASENAME" | sed 's/\.sh$//g')
-  cd $DIRNAME
-  tar czhf "${CWD}/${COMPANION_FILES}.tgz" "$COMPANION_FILES"
-  echo == ORIGEN ==
-  tar tvf "${CWD}/${COMPANION_FILES}.tgz"
-  echo ">><<"
-  docker exec "$CONTAINER_ID" mkdir -p /testing/
-  docker exec -i "$CONTAINER_ID" tee "/testing/${BASENAME}" < "${CWD}/${i}" > /dev/null
-  docker exec -i "$CONTAINER_ID" tee "/testing/${COMPANION_FILES}.tgz" < "${CWD}/${COMPANION_FILES}.tgz" > /dev/null
-  docker exec "$CONTAINER_ID" tar xzvf "/testing/${COMPANION_FILES}.tgz" -C /testing
-  echo == docker testing ==
-  docker exec "$CONTAINER_ID" find /testing -type f
-  echo ">><<"
+  if [ -d "$COMPANION_FILES" ];
+  then
+    cd $DIRNAME
+    tar czhf "${CWD}/${COMPANION_FILES}.tgz" "$COMPANION_FILES"
+    if [ "${INPUT_DEBUG-0}" = 1 ];
+    then
+      echo == TEST FILES ==
+      tar tvf "${CWD}/${COMPANION_FILES}.tgz"
+      echo ">><<"
+    fi
+    docker exec "$CONTAINER_ID" mkdir -p /testing/
+    docker exec -i "$CONTAINER_ID" tee "/testing/${BASENAME}" < "${CWD}/${i}" > /dev/null
+    docker exec -i "$CONTAINER_ID" tee "/testing/${COMPANION_FILES}.tgz" < "${CWD}/${COMPANION_FILES}.tgz" > /dev/null
+    docker exec "$CONTAINER_ID" tar xzvf "/testing/${COMPANION_FILES}.tgz" -C /testing
+    if [ "${INPUT_DEBUG-0}" = 1 ];
+    then
+      echo == TEST FILES INSIDER DOCKER ==
+      docker exec "$CONTAINER_ID" find /testing -type f
+      echo ">><<"
+    fi
+  fi
 
   if [ "${INPUT_DEBUG-0}" = 1 ];
   then
