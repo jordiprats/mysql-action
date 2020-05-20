@@ -22,16 +22,20 @@ chmod 0600 ~/.my.cnf
 
 cat ~/.my.cnf
 
-DOCKERUN="$DOCKERUN -d -p 3306:3306 -v "$(pwd)":/testing mysql:$INPUT_MYSQL_VERSION --port=3306"
+#-p 3306:3306
+DOCKERUN="$DOCKERUN -d -v "$(pwd)":/testing mysql:$INPUT_MYSQL_VERSION --port=3306"
 
-echo $DOCKERUN
 CONTAINER_ID=$(sh -c "$DOCKERUN")
 
-# let mysql startup
-sleep 5s
+# let mysql start
+sleep 30s
 
-docker ps
+echo $DOCKERUN
+
 docker ps --all
+
+docker exec -t "$CONTAINER_ID" ls
+docker exec -t "$CONTAINER_ID" ls /testing
 
 docker exec -t "$CONTAINER_ID" bash -c "echo 'show processlist' | mysql"
 docker exec -t "$CONTAINER_ID" bash -c "echo 'show databases' | mysql"
