@@ -27,6 +27,9 @@ DOCKERUN="$DOCKERUN -d -p 3306:3306 mysql:$INPUT_MYSQL_VERSION --port=3306"
 echo $DOCKERUN
 CONTAINER_ID=$(sh -c "$DOCKERUN")
 
+# let mysql startup
+sleep 5s
+
 docker ps
 docker ps --all
 
