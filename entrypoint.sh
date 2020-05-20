@@ -65,7 +65,7 @@ fi
 
 for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
-  BASENAME=$(basename $i)
+  cat "$i"
   cat "$i" | docker exec -t "$CONTAINER_ID" "cat > /testing/runme"
   docker exec -t "$CONTAINER_ID" "cat /testing/runme"
   docker exec -t "$CONTAINER_ID" "bash /testing/runme"
