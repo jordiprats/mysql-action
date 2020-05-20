@@ -21,7 +21,7 @@ Options:
 
 ```
 steps:
-- uses: jordiprats/mysql-action@v1.0
+- uses: jordiprats/mysql-action@v1.1
   with:
     mysql version: '8.0'
 ```

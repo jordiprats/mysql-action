@@ -36,9 +36,9 @@ for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
   DIRNAME=$(dirname "$i")
   BASENAME=$(basename "$i")
-  
+
   COMPANION_FILES=$(echo "$BASENAME" | sed 's/\.sh$//g')
-  if [ -d "$COMPANION_FILES" ];
+  if [ -d "${DIRNAME}/${COMPANION_FILES}" ];
   then
     cd $DIRNAME
     tar czhf "${CWD}/${COMPANION_FILES}.tgz" "$COMPANION_FILES"
