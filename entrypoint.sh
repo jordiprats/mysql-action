@@ -25,7 +25,7 @@ cat ~/.my.cnf
 DOCKERUN="$DOCKERUN -d -p 3306:3306 mysql:$INPUT_MYSQL_VERSION --port=3306"
 
 echo $DOCKERUN
-sh -c "$DOCKERUN"
+CONTAINER_ID=$(sh -c "$DOCKERUN")
 
 docker ps
 docker ps --all
@@ -44,7 +44,7 @@ fi
 
 for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
-  bash $i
+  docker exec -t "$CONTAINER_ID" bash "$i"
   if [ "$?" -eq 0 ] && [ "$RETURN" -ne 2 ];
   then
     echo "OK: $i"
