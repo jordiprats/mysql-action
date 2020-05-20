@@ -9,8 +9,9 @@ chmod 0600 ./docker-mycnf
 
 DOCKERUN="$DOCKERUN -d -p 3307:3307 mysql:$INPUT_MYSQL_VERSION --port=3307"
 
-CONTAINER_ID=$(sh -c "$DOCKERUN")
-
+echo -n "deploying mysql container... "
+CONTAINER_ID=$(sh -c "$DOCKERUN") 2>/dev/null
+echo "OK - mysql container deployed."
 # let mysql start
 echo "sleeping 20s..."
 sleep 20s
