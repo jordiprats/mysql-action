@@ -42,7 +42,7 @@ do
   echo == ORIGEN ==
   tar tvf "${CWD}/${COMPANION_FILES}.tgz"
   echo ">><<"
-  docker exec "$CONTAINER_ID" mkdir /testing/
+  docker exec "$CONTAINER_ID" mkdir -p /testing/
   docker exec -i "$CONTAINER_ID" tee "/testing/${BASENAME}" < "${CWD}/${i}" > /dev/null
   docker exec -i "$CONTAINER_ID" tee "/testing/${COMPANION_FILES}.tgz" < "${CWD}/${COMPANION_FILES}.tgz" > /dev/null
   docker exec "$CONTAINER_ID" tar xzvf "/testing/${COMPANION_FILES}.tgz" -C /testing
