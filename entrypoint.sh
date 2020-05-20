@@ -66,9 +66,9 @@ fi
 for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
   BASENAME=$(basename $i)
-  cat "$i" | docker exec -t "$CONTAINER_ID" "cat > /testing/$BASENAME"
-  docker exec -t "$CONTAINER_ID" "cat /testing/${BASENAME}"
-  docker exec -t "$CONTAINER_ID" "bash /testing/${BASENAME}"
+  cat "$i" | docker exec -t "$CONTAINER_ID" "cat > /testing/runme"
+  docker exec -t "$CONTAINER_ID" "cat /testing/runme"
+  docker exec -t "$CONTAINER_ID" "bash /testing/runme"
   if [ "$?" -eq 0 ] && [ "$RETURN" -ne 2 ];
   then
     echo "OK: $i"
