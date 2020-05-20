@@ -5,6 +5,7 @@ DOCKERUN="docker run"
 echo "[client]" > ~/.my.cnf
 echo "user=root" >> ~/.my.cnf
 echo "host=127.0.0.1" >> ~/.my.cnf
+echo "port=3307" >> ~/.my.cnf
 echo "protocol=tcp" >> ~/.my.cnf
 
 if [ ! -z "$INPUT_MYSQL_ROOT_PASSWORD" ];
@@ -22,8 +23,7 @@ chmod 0600 ~/.my.cnf
 
 cat ~/.my.cnf
 
-#-p 3306:3306
-DOCKERUN="$DOCKERUN -d -v "$(pwd)":/testing mysql:$INPUT_MYSQL_VERSION --port=3306"
+DOCKERUN="$DOCKERUN -d -p 3307:3307 -v "$(pwd)":/testing mysql:$INPUT_MYSQL_VERSION --port=3307"
 
 CONTAINER_ID=$(sh -c "$DOCKERUN")
 
@@ -34,11 +34,18 @@ echo $DOCKERUN
 
 docker ps --all
 
+echo == ls $(pwd) ==
+ls $(pwd)
+
+echo == docker ls ==
 docker exec -t "$CONTAINER_ID" ls
+
+echo == docker testing ==
 docker exec -t "$CONTAINER_ID" ls /testing
 
 docker exec -t "$CONTAINER_ID" bash -c "echo 'show processlist' | mysql"
 docker exec -t "$CONTAINER_ID" bash -c "echo 'show databases' | mysql"
+
 
 RETURN=1
 
