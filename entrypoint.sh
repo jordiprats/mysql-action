@@ -23,7 +23,7 @@ chmod 0600 ~/.my.cnf
 
 cat ~/.my.cnf
 
-DOCKERUN="$DOCKERUN -d -p 3307:3307 -v "$(pwd)":/testing mysql:$INPUT_MYSQL_VERSION --port=3307"
+DOCKERUN="$DOCKERUN -d -p 3307:3307 --mount type=bind,source="$(pwd)",target=/testing mysql:$INPUT_MYSQL_VERSION --port=3307"
 
 CONTAINER_ID=$(sh -c "$DOCKERUN")
 
