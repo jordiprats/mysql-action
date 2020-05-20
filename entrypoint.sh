@@ -31,18 +31,19 @@ else
   FIND_DIR="."
 fi
 
+CWD=$(pwd)
 for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
   DIRNAME=$(dirname "$i")
   BASENAME=$(basename "$i")
   COMPANION_FILES=$(echo "$BASENAME" | sed 's/\.sh$//g')
   cd DIRNAME
-  tar czhf "${COMPANION_FILES}.tgz" "$COMPANION_FILES"
+  tar czhf "${CWD}/${COMPANION_FILES}.tgz" "$COMPANION_FILES"
   echo == ORIGEN ==
-  tar tvf "${COMPANION_FILES}.tgz"
+  tar tvf "${CWD}/${COMPANION_FILES}.tgz"
   docker exec "$CONTAINER_ID" mkdir /testing/
   docker exec -i "$CONTAINER_ID" tee "/testing/${BASENAME}" < "$i" > /dev/null
-  docker exec -i "$CONTAINER_ID" tee "/testing/${COMPANION_FILES}.tgz" < "${COMPANION_FILES}.tgz" > /dev/null
+  docker exec -i "$CONTAINER_ID" tee "/testing/${COMPANION_FILES}.tgz" < "${CWD}/${COMPANION_FILES}.tgz" > /dev/null
   docker exec "$CONTAINER_ID" tar xzvf "/testing/${COMPANION_FILES}.tgz" -C /testing
   echo == docker testing ==
   docker exec "$CONTAINER_ID" find /testing -type f
