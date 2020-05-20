@@ -2,22 +2,22 @@
 
 DOCKERUN="docker run"
 
-echo "[client]" > ~/docker-mycnf
+echo "[client]" > ./docker-mycnf
 
 if [ ! -z "$INPUT_MYSQL_ROOT_PASSWORD" ];
 then
   echo "setting root password"
   DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=$INPUT_MYSQL_ROOT_PASSWORD"
-  echo "password=$INPUT_MYSQL_ROOT_PASSWORD" >> ~/docker-mycnff
+  echo "password=$INPUT_MYSQL_ROOT_PASSWORD" >> ./docker-mycnff
 else
   echo "default mysql password"
   DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=sha256"
-  echo "password=sha256" >> ~/docker-mycnf
+  echo "password=sha256" >> ./docker-mycnf
 fi
 
-chmod 0600 ~/docker-mycnf
+chmod 0600 ./docker-mycnf
 
-cat ~/docker-mycnf
+cat ./docker-mycnf
 
 DOCKERUN="$DOCKERUN -d -p 3307:3307 mysql:$INPUT_MYSQL_VERSION --port=3307"
 
@@ -30,13 +30,13 @@ sleep 20s
 echo $DOCKERUN
 
 echo cat
-docker exec "$CONTAINER_ID" bash -c "cat" < ~/docker-mycnf
+docker exec "$CONTAINER_ID" bash -c "cat" < ./docker-mycnf
 echo cat to file
-docker exec "$CONTAINER_ID" bash -c "cat > /root/.my.cnf" < ~/docker-mycnf
-docker exec "$CONTAINER_ID" "chmod 600 ~/.my.cnf"
+docker exec "$CONTAINER_ID" bash -c "cat > /root/.my.cnf" < ./docker-mycnf
+docker exec "$CONTAINER_ID" "chmod 600 /root/.my.cnf"
 
 echo == docker my.cnf ==
-docker exec "$CONTAINER_ID" "cat ~/.my.cnf"
+docker exec "$CONTAINER_ID" "cat /root/.my.cnf"
 
 docker ps --all
 
