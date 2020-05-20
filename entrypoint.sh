@@ -41,12 +41,14 @@ do
   tar czhf "${CWD}/${COMPANION_FILES}.tgz" "$COMPANION_FILES"
   echo == ORIGEN ==
   tar tvf "${CWD}/${COMPANION_FILES}.tgz"
+  echo ">><<"
   docker exec "$CONTAINER_ID" mkdir /testing/
-  docker exec -i "$CONTAINER_ID" tee "/testing/${BASENAME}" < "$i" > /dev/null
+  docker exec -i "$CONTAINER_ID" tee "/testing/${BASENAME}" < "${CWD}/${i}" > /dev/null
   docker exec -i "$CONTAINER_ID" tee "/testing/${COMPANION_FILES}.tgz" < "${CWD}/${COMPANION_FILES}.tgz" > /dev/null
   docker exec "$CONTAINER_ID" tar xzvf "/testing/${COMPANION_FILES}.tgz" -C /testing
   echo == docker testing ==
   docker exec "$CONTAINER_ID" find /testing -type f
+  echo ">><<"
 
   if [ "${INPUT_DEBUG-0}" = 1 ];
   then
