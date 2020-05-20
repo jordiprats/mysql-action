@@ -37,6 +37,7 @@ do
   BASENAME=$(basename "$i")
   COMPANION_FILES=$(echo "$BASENAME" | sed 's/\.sh$//g')
   tar czhf "${COMPANION_FILES}.tgz" "$DIRNAME/$COMPANION_FILES"
+  tar tvf "${COMPANION_FILES}.tgz"
   docker exec "$CONTAINER_ID" mkdir /testing/
   docker exec -i "$CONTAINER_ID" tee "/testing/${BASENAME}" < "$i" > /dev/null
   docker exec -i "$CONTAINER_ID" tee "/testing/${COMPANION_FILES}.tgz" < "${COMPANION_FILES}.tgz" > /dev/null
