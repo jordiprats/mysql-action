@@ -23,20 +23,20 @@ chmod 0600 ~/.my.cnf
 
 cat ~/.my.cnf
 
-DOCKERUN="$DOCKERUN -d -p 3307:3307 --mount type=bind,source="$(pwd)",target=/testing mysql:$INPUT_MYSQL_VERSION --port=3307"
+DOCKERUN="$DOCKERUN -d -p 3307:3307 mysql:$INPUT_MYSQL_VERSION --port=3307"
 
 CONTAINER_ID=$(sh -c "$DOCKERUN")
 
 # let mysql start
-sleep 30s
+sleep 20s
 
 echo $DOCKERUN
 
 cat ~/.my.cnf | docker exec -t "$CONTAINER_ID" "cat > ~/.my.cnf"
-cat ~/.my.cnf | docker exec -t "$CONTAINER_ID" "chmod 600 ~/.my.cnf"
+docker exec -t "$CONTAINER_ID" "chmod 600 ~/.my.cnf"
 
 echo == docker my.cnf ==
-cat ~/.my.cnf | docker exec -t "$CONTAINER_ID" "cat ~/.my.cnf"
+docker exec -t "$CONTAINER_ID" "cat ~/.my.cnf"
 
 docker ps --all
 
@@ -47,6 +47,7 @@ echo == docker ls ==
 docker exec -t "$CONTAINER_ID" ls
 
 echo == docker testing ==
+docker exec -t "$CONTAINER_ID" mkdir -p /testing
 docker exec -t "$CONTAINER_ID" ls /testing
 
 docker exec -t "$CONTAINER_ID" bash -c "echo 'show processlist' | mysql"
@@ -64,7 +65,8 @@ fi
 
 for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
-  docker exec -t "$CONTAINER_ID" bash "/testing/$i"
+  cat "$i" | docker exec -t "$CONTAINER_ID" "cat > /testing/$(basename \"$i\")"
+  docker exec -t "$CONTAINER_ID" bash "/testing/$(basename \"$i\")"
   if [ "$?" -eq 0 ] && [ "$RETURN" -ne 2 ];
   then
     echo "OK: $i"
