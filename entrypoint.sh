@@ -2,45 +2,43 @@
 
 DOCKERUN="docker run"
 
-echo "[client]" > ~/.my.cnf
-echo "user=root" >> ~/.my.cnf
-echo "host=127.0.0.1" >> ~/.my.cnf
-echo "port=3307" >> ~/.my.cnf
-echo "protocol=tcp" >> ~/.my.cnf
+echo "[client]" > ~/docker-mycnf
 
 if [ ! -z "$INPUT_MYSQL_ROOT_PASSWORD" ];
 then
   echo "setting root password"
   DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=$INPUT_MYSQL_ROOT_PASSWORD"
-  echo "password=$INPUT_MYSQL_ROOT_PASSWORD" >> ~/.my.cnf
+  echo "password=$INPUT_MYSQL_ROOT_PASSWORD" >> ~/docker-mycnff
 else
   echo "default mysql password"
   DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=sha256"
-  echo "password=sha256" >> ~/.my.cnf
+  echo "password=sha256" >> ~/docker-mycnf
 fi
 
-chmod 0600 ~/.my.cnf
+chmod 0600 ~/docker-mycnf
 
-cat ~/.my.cnf
+cat ~/docker-mycnf
 
 DOCKERUN="$DOCKERUN -d -p 3307:3307 mysql:$INPUT_MYSQL_VERSION --port=3307"
 
 CONTAINER_ID=$(sh -c "$DOCKERUN")
 
 # let mysql start
+echo "sleeping 20s..."
 sleep 20s
 
 echo $DOCKERUN
 
-cat ~/.my.cnf | docker exec -t "$CONTAINER_ID" bash -c "cat > ~/.my.cnf"
-docker exec -t "$CONTAINER_ID" "chmod 600 ~/.my.cnf"
+echo cat
+docker exec "$CONTAINER_ID" bash -c "cat" < ~/docker-mycnf
+echo cat to file
+docker exec "$CONTAINER_ID" bash -c "cat > /root/.my.cnf" < ~/docker-mycnf
+docker exec "$CONTAINER_ID" "chmod 600 ~/.my.cnf"
 
 echo == docker my.cnf ==
-docker exec -t "$CONTAINER_ID" "cat ~/.my.cnf"
+docker exec "$CONTAINER_ID" "cat ~/.my.cnf"
 
 docker ps --all
-
-docker exec -t "$CONTAINER_ID" ps auxf
 
 echo == ls $(pwd) ==
 ls $(pwd)
@@ -52,8 +50,8 @@ echo == docker testing ==
 docker exec -t "$CONTAINER_ID" mkdir -p /testing
 docker exec -t "$CONTAINER_ID" ls /testing
 
-docker exec -t "$CONTAINER_ID" bash -c "echo 'show processlist' | mysql"
-docker exec -t "$CONTAINER_ID" bash -c "echo 'show databases' | mysql"
+docker exec "$CONTAINER_ID" bash -c "echo 'show processlist' | mysql"
+docker exec "$CONTAINER_ID" bash -c "echo 'show databases' | mysql"
 
 
 RETURN=1
@@ -69,9 +67,9 @@ for i in $(/usr/bin/find "${FIND_DIR}" -iname '*.sh')
 do
   BASENAME=$(basename $i)
   cat "$i"
-  cat "$i" | docker exec -t "$CONTAINER_ID" bash -c "cat > /testing/${BASENAME}"
-  docker exec -t "$CONTAINER_ID" cat "/testing/${BASENAME}"
-  docker exec -t "$CONTAINER_ID" bash "/testing/${BASENAME}"
+  cat "$i" | docker exec "$CONTAINER_ID" bash -c "cat > /testing/${BASENAME}"
+  docker exec "$CONTAINER_ID" cat "/testing/${BASENAME}"
+  docker exec "$CONTAINER_ID" bash "/testing/${BASENAME}"
 
   if [ "$?" -eq 0 ] && [ "$RETURN" -ne 2 ];
   then
