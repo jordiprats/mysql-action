@@ -7,7 +7,7 @@ echo "$INPUT_MYSQL_ROOT_PASSWORD"
 INPUT_MYSQL_ROOT_PASSWORD=${INPUT_MYSQL_ROOT_PASSWORD-sha256}
 
 DOCKERUN="$DOCKERUN -e MYSQL_ROOT_PASSWORD=$INPUT_MYSQL_ROOT_PASSWORD"
-echo -e "[client]\npassword=$INPUT_MYSQL_ROOT_PASSWORD" > ./docker-mycnf
+echo -e "[client]\npassword=${INPUT_MYSQL_ROOT_PASSWORD-sha256}" > ./docker-mycnf
 
 echo "$INPUT_MYSQL_ROOT_PASSWORD"
 
@@ -27,7 +27,7 @@ echo $DOCKERUN
 echo local cat
 cat ./docker-mycnf
 echo docker cat to file
-docker exec "$CONTAINER_ID" bash -c "cat > /root/.my.cnf" < ./docker-mycnf
+docker exec "$CONTAINER_ID" tee /root/.my.cnf < ./docker-mycnf
 echo docker cat imported file
 docker exec "$CONTAINER_ID" cat /root/.my.cnf
 
