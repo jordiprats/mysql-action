@@ -26,10 +26,11 @@ sleep 20s
 echo $DOCKERUN
 echo local cat
 cat ./docker-mycnf
-echo docker cat
-docker exec "$CONTAINER_ID" bash -c "cat" < ./docker-mycnf
-echo dockercat to file
+echo docker cat to file
 docker exec "$CONTAINER_ID" bash -c "cat > /root/.my.cnf" < ./docker-mycnf
+echo docker cat imported file
+docker exec "$CONTAINER_ID" cat /root/.my.cnf
+
 docker exec "$CONTAINER_ID" chmod 600 /root/.my.cnf
 
 echo == docker my.cnf ==
